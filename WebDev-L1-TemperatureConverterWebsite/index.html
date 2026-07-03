@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temperature Converter</title>
+<style>
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: rgb(3, 11, 52);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+
+  /*  Card  */
+  .converter-card {
+    background-color: #fcfcd8;
+    width: 100%;
+    max-width: 420px;
+    border-radius: 12px;
+    box-shadow: 0 10px 50px rgb(255, 255, 255);
+    padding: 35px 30px;
+  }
+
+  h1 {
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    text-align: center;
+    color: #000000;
+    font-size: 24px;
+    margin-bottom: 25px;
+  }
+
+  /*  Form Elements  */
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    font-size: 14px;
+    color: #555555;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #0f24c3;
+    border-radius: 6px;
+    outline: none;
+  }
+
+  input[type="text"]:focus {
+    border-color: #1e1394;
+  }
+
+  /*  Radio Buttons  */
+  .radio-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .radio-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    color: #333;
+  }
+
+  .radio-option input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+
+  /*  Convert Button  */
+  .convert-btn {
+    width: 100%;
+    padding: 13px;
+    background-color: rgb(0, 31, 185);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .convert-btn:hover {
+    background-color: #865c0f;
+  }
+
+  /*  Result Display  */
+  .result-box {
+    margin-top: 20px;
+    padding: 18px;
+    background-color: #f0fdf8;
+    border: 2px solid #1500ff;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #160637;
+    display: none;
+  }
+
+  .error-text {
+    color: #e63946;
+    font-size: 13px;
+    margin-top: 6px;
+    display: none;
+  }
+
+</style>
+</head>
+<body>
+
+  <div class="converter-card">
+    <h1>🌡️ Temperature Converter</h1>
+
+    <!--  Input Field  -->
+    <div class="form-group">
+      <label for="tempInput">Enter Temperature</label>
+      <input type="text" id="tempInput" placeholder="e.g. 25">
+      <p class="error-text" id="errorMsg">Please enter a valid number!</p>
+    </div>
+
+    <!--  From Unit (Radio Buttons)  -->
+    <div class="form-group">
+      <label>Convert From</label>
+      <div class="radio-group">
+        <div class="radio-option">
+          <input type="radio" name="fromUnit" id="fromCelsius" value="celsius" checked>
+          <label for="fromCelsius">Celsius</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" name="fromUnit" id="fromFahrenheit" value="fahrenheit">
+          <label for="fromFahrenheit">Fahrenheit</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" name="fromUnit" id="fromKelvin" value="kelvin">
+          <label for="fromKelvin">Kelvin</label>
+        </div>
+      </div>
+    </div>
+
+    <!--  To Unit (Dropdown)  -->
+    <div class="form-group">
+      <label for="toUnit">Convert To</label>
+      <select id="toUnit" style="width:100%; padding:12px; font-size:16px; border:2px solid #ccc; border-radius:6px;">
+        <option value="celsius">Celsius</option>
+        <option value="fahrenheit" selected>Fahrenheit</option>
+        <option value="kelvin">Kelvin</option>
+      </select>
+    </div>
+
+    <!--  Convert Button  -->
+    <button class="convert-btn" onclick="convertTemperature()">Convert</button>
+
+    <!--  Result  -->
+    <div class="result-box" id="resultBox"></div>
+  </div>
+  
+
+  <script>
+    function convertTemperature() {
+      const inputValue = document.getElementById("tempInput").value.trim();
+      const errorMsg = document.getElementById("errorMsg");
+      const resultBox = document.getElementById("resultBox");
+
+      //  Step 1: Validate input is a number 
+      if (inputValue === "" || isNaN(inputValue)) {
+        errorMsg.style.display = "block";
+        resultBox.style.display = "none";
+        return;
+      } else {
+        errorMsg.style.display = "none";
+      }
+
+      const temp = parseFloat(inputValue);
+
+      // Edge Case: Absolute Zero Validation
+      const fromUnitForCheck = document.querySelector('input[name="fromUnit"]:checked').value;
+      
+      if (
+        (fromUnitForCheck === "celsius" && temp < -273.15) ||
+        (fromUnitForCheck === "fahrenheit" && temp < -459.67) ||
+        (fromUnitForCheck === "kelvin" && temp < 0)
+      ) {
+        errorMsg.innerText = "Temperature cannot be below Absolute Zero!";
+        errorMsg.style.display = "block";
+        resultBox.style.display = "none";
+        return; 
+      } else {
+        errorMsg.style.display = "none";
+       
+        errorMsg.innerText = "Please enter a valid number!"; 
+      }
+
+
+      //  Step 2: Get selected "from" and "to" units 
+      const fromUnit = document.querySelector('input[name="fromUnit"]:checked').value;
+      const toUnit = document.getElementById("toUnit").value;
+      
+
+      //  Step 3: Convert input temperature to Celsius first 
+      let celsius;
+      if (fromUnit === "celsius") {
+        celsius = temp;
+      } else if (fromUnit === "fahrenheit") {
+        celsius = (temp - 32) * 5 / 9;
+      } else if (fromUnit === "kelvin") {
+        celsius = temp - 273.15;
+      }
+
+      //  Step 4: Convert Celsius to target unit 
+      let result;
+      let unitSymbol;
+
+      if (toUnit === "celsius") {
+        result = celsius;
+        unitSymbol = "°C";
+      } else if (toUnit === "fahrenheit") {
+        result = (celsius * 9 / 5) + 32;
+        unitSymbol = "°F";
+      } else if (toUnit === "kelvin") {
+        result = celsius + 273.15;
+        unitSymbol = "K";
+      }
+
+      //  Step 5: Display result 
+      result = result.toFixed(2);
+      resultBox.innerHTML = temp + " " + getSymbol(fromUnit) + " = " + result + " " + unitSymbol;
+      resultBox.style.display = "block";
+    }
+
+    // Helper function to get symbol for "from" unit
+    function getSymbol(unit) {
+      if (unit === "celsius") return "°C";
+      if (unit === "fahrenheit") return "°F";
+      if (unit === "kelvin") return "K";
+    }
+  </script>
+
+</body>
+</html>
