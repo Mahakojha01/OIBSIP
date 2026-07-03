@@ -1,11 +1,10 @@
 # 🌍 Rakhi Travels - Landing Page
 
 
+## 📌 OIBSIP Web Development and Designing Internship
 
-## 📌 Project Title
-
-Rakhi Travels - Responsive Travel Landing Page
-
+**Level:** Level 1  
+**Task:** Task 1 - Landing Page
 
 
 ## 📖 Description
