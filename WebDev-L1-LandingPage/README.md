@@ -69,11 +69,7 @@ This is a responsive travel landing page developed using HTML5 and CSS3. It show
 
 
 
-```md
-
 ![Project Screenshot](screenshot.jpeg)
-
-```
 
 
 
